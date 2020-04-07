@@ -1,6 +1,6 @@
 # Some Bacterial Proteins
 
-[![Edwards Lab](https://img.shields.io/badge/Bioinformatics-Edwards-Red)(https://edwards.sdsu.edu/research)
+[![Edwards Lab](https://img.shields.io/badge/Bioinformatics-Edwards-Red)](https://edwards.sdsu.edu/research)
 [![DOI](https://www.zenodo.org/badge/252589739.svg)](https://www.zenodo.org/badge/latestdoi/252589739)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
