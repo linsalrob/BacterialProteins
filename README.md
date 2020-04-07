@@ -35,7 +35,7 @@ We have not provided these files, but you can easily recreate them from the file
 
 File | Number of proteins
 --- | ---
-All proteins in complete genomes | 
+All proteins in complete genomes | 73,138,809
 After dereplicating at 100% identity | 31,177,581
 After dereplicating at 70% identity  | 10,262,128
 After removing singletons (clusters with 1 member) | 3,228,900
