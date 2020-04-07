@@ -1,4 +1,4 @@
-# Some Bacterial Proteins
+# Reduced Bacterial Proteins Database
 
 [![Edwards Lab](https://img.shields.io/badge/Bioinformatics-EdwardsLab-03A9F4)](https://edwards.sdsu.edu/research)
 [![DOI](https://www.zenodo.org/badge/252589739.svg)](https://www.zenodo.org/badge/latestdoi/252589739)
@@ -42,8 +42,9 @@ After removing singletons (clusters with 1 member) | 3,228,900
 After removing clusters with 3 or fewer members | 1,352,145
 After removing clusters with 5 or fewer members | 846,123
 
+# Citing this work
 
-
+Please [cite this work](CITATION.md) if you use it!
 
 # Creating the database
 
