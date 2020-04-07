@@ -1,20 +1,51 @@
-# BacterialProteins
+# Some Bacterial Proteins
 
-[![DOI](https://www.zenodo.org/badge/60999054.svg)](https://www.zenodo.org/badge/latestdoi/60999054)
+[![Edwards Lab](https://img.shields.io/badge/Bioinformatics-Edwards-Red)(https://edwards.sdsu.edu/research)
+[![DOI](https://www.zenodo.org/badge/252589739.svg)](https://www.zenodo.org/badge/latestdoi/252589739)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
-![GitHub language count](https://img.shields.io/github/languages/count/linsalrob/BacterialProteins)
 
 
-A database of a reduced set of bacterial (and perhaps archaeal) proteins
+We have created a database of a reduced set of bacterial (and perhaps archaeal) proteins that can be used freely by anyone.
 
-This database houses a subset of bacterial proteins, and can be used freely by anyone.
-
-The overall goal is to make a small database that has exemplar bacterial proteins that can be used to screen for some features. It is not expected to be a complete set of bacterial proteins, nor is it expected to contain _every_ protein. However, it should contain _most_ bacterial proteins.
+Our overall goal is to make a small database that has exemplar bacterial proteins that can be used to screen for some features. It is not expected to be a complete set of bacterial proteins, nor is it expected to contain _every_ protein. However, it should contain _most_ bacterial proteins, depending on how you define that. Essentially we want to screen contigs against common bacterial proteins, and are less interested in the single hypothetical proteins that contribute a lot of proteins.
 
 The database uses the upper case protein sequence's [md5sum](https://en.wikipedia.org/wiki/Md5sum) as an identifier for the sequence. There are many advantages to this: in particular it is computable based on the protein sequence, so you can easily test if you have seen the sequence before. There is a minor issue using the md5sum, which is that there is a chance of false positives - you may think you have seen a sequence before but you have not. However, in testing that did not occur with this protein database.
 
 We make a separate file with the IDs and their definition lines from PATRIC, called [id.map](id.map.gz) that you can download separately. You should probably store that in a [SQLite](https://www.sqlite.org/) or similar database for rapid access, but we haven't provided that yet. Let us know if you need it. 
 
+
+# Release 2020/03/28 Statistics
+
+You can download the individual fasta files:
+- [proteins.70.cdhit.gz](https://edwards.sdsu.edu/data/BacterialProteins/latest/id.map.gz) [1.9 G] Fasta file of the proteins dereplicated at 70%.
+- [id.map](https://edwards.sdsu.edu/data/BacterialProteins/latest/id.map.gz) [2.7G] This file contains the id and the sequence definition line
+- [proteins.70.cdhit.clstr.gz](https://edwards.sdsu.edu/data/BacterialProteins/latest/proteins.70.cdhit.clstr.gz) [760M] The cd-hit cluster definitions including all proteins and the clusters to which they belong.
+
+## Reduced data sets
+
+You can reduce this set further by extracting clusters with at least _n_ members.
+
+e.g. all clusters of 6 or more proteins (note the parameter `-m` is the minimum that must be exceeded):
+
+```
+python3 scripts/extract_clusters.py -f proteins.70.cdhit -c proteins.70.cdhit.clstr -m 5 -v >  proteins.70.cdhit.5members.faa
+```
+
+We have not provided these files, but you can easily recreate them from the files available above.
+
+File | Number of proteins
+--- | ---
+All proteins in complete genomes | 
+After dereplicating at 100% identity | 31,177,581
+After dereplicating at 70% identity  | 10,262,128
+After removing singletons (clusters with 1 member) | 3,228,900
+After removing clusters with 3 or fewer members | 1,352,145
+After removing clusters with 5 or fewer members | 846,123
+
+
+
+
+# Creating the database
 
 The steps to make the database are:
 
@@ -64,31 +95,3 @@ cd-hit -d 0 -M 0 -i proteins.faa -o proteins.70.cdhit -c 0.7 -T 0
 
 (_Note_: I also tried to do this with `mmseqs2` but it crashed)
 
-
-# Release 2020/03/28 Statistics
-
-You can download the individual fasta files:
-- [proteins.70.cdhit.gz](https://edwards.sdsu.edu/data/BacterialProteins/latest/id.map.gz) [1.9 G] Fasta file of the proteins dereplicated at 70%.
-- [id.map](https://edwards.sdsu.edu/data/BacterialProteins/latest/id.map.gz) [2.7G] This file contains the id and the sequence definition line
-- [proteins.70.cdhit.clstr.gz](https://edwards.sdsu.edu/data/BacterialProteins/latest/proteins.70.cdhit.clstr.gz) [760M] The cd-hit cluster definitions including all proteins and the clusters to which they belong.
-
-## Reduced data sets
-
-You can reduce this set further by extracting clusters with at least _n_ members.
-
-e.g. all clusters of 6 or more proteins (note the parameter `-m` is the minimum that must be exceeded):
-
-```
-python3 scripts/extract_clusters.py -f proteins.70.cdhit -c proteins.70.cdhit.clstr -m 5 -v >  proteins.70.cdhit.5members.faa
-```
-
-We have not provided these files, but you can easily recreate them from the files available above.
-
-File | Number of proteins
---- | ---
-
-After dereplicating at 100% identity | 31,177,581
-After dereplicating at 70% identity  | 10,262,128
-After removing singletons (clusters with 1 member) | 3,228,900
-After removing clusters with 3 or fewer members | 1,352,145
-After removing clusters with 5 or fewer members | 846,123
