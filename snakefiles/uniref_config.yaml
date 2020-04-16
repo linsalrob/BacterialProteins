@@ -1,0 +1,8 @@
+---
+Paths:
+    'NCBI taxonomy directory': 'ncbi'
+    'Uniprot directory' : 'uniref'
+    'Output directory': 'Results'
+    'Log directory': 'log'
+
+'Taxonomic rank': 'superkingdom'
