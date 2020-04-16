@@ -51,8 +51,8 @@ To run the snakefile you will need
 - [cURL](https://curl.haxx.se/) [this is probably already installed on your computer]
 - [md5sum](https://en.wikipedia.org/wiki/Md5sum) [this is probably already installed on your computer]
 - [tar](https://www.gnu.org/software/tar/) [this is probably already installed on your computer]
-- The [snakefile](uniref.snakefile)
-- The [config file](uniref_config.yaml)
+- The [snakefile](https://github.com/linsalrob/ReducedBacterialProteinsDatabase/blob/master/snakefiles/uniref.snakefile)
+- The [config file](https://github.com/linsalrob/ReducedBacterialProteinsDatabase/blob/master/snakefiles/uniref_config.yaml)
 
 # Creating the databases
 
