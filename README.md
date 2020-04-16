@@ -1,9 +1,20 @@
-# Reduced Bacterial Proteins Database
-
 [![Edwards Lab](https://img.shields.io/badge/Bioinformatics-EdwardsLab-03A9F4)](https://edwards.sdsu.edu/research)
 [![DOI](https://www.zenodo.org/badge/252589739.svg)](https://www.zenodo.org/badge/latestdoi/252589739)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
+# Reduced Bacterial Proteins Database
+
+Take a look at the [UniRef](UNIPROT.md) clustered protein sequences. This is something that you can regularly update.
+
+File | Size<sup>1</sup> |  Number of proteins
+--- | --- | ---
+Archaea.fasta | 364M | 1,033,278
+Bacteria.fasta | 8.2G | 23,175,113
+Eukaryota.fasta | 5.6G | 13,232,212
+root.fasta | 445M | 1,410,200
+Viruses.fasta | 131M | 381,994
+
+# Another clustering version
 
 We have created a database of a reduced set of bacterial (and perhaps archaeal) proteins that can be used freely by anyone.
 
@@ -33,14 +44,14 @@ python3 scripts/extract_clusters.py -f proteins.70.cdhit -c proteins.70.cdhit.cl
 
 We have not provided these files, but you can easily recreate them from the files available above.
 
-File | Number of proteins
---- | ---
-All proteins in complete genomes | 73,138,809
-After dereplicating at 100% identity | 31,177,581
-After dereplicating at 70% identity  | 10,262,128
-After removing singletons (clusters with 1 member) | 3,228,900
-After removing clusters with 3 or fewer members | 1,352,145
-After removing clusters with 5 or fewer members | 846,123
+File | Size<sup>1</sup> | Number of proteins
+--- | --- | ---
+All proteins in complete genomes | 30G | 73,138,809
+After dereplicating at 100% identity | 11G  | 31,177,581
+After dereplicating at 70% identity  | 3.0G | 10,262,128
+After removing singletons (clusters with 1 member) | 1.1G | 3,228,900
+After removing clusters with 3 or fewer members | 486M | 1,352,145
+After removing clusters with 5 or fewer members | 314M |  846,123
 
 # Citing this work
 
@@ -96,3 +107,6 @@ cd-hit -d 0 -M 0 -i proteins.faa -o proteins.70.cdhit -c 0.7 -T 0
 
 (_Note_: I also tried to do this with `mmseqs2` but it crashed)
 
+
+
+<sup>1</sup>Sizes are reported by `ls -lh` and reflect the file sizes.
