@@ -45,7 +45,7 @@ snakemake --configfile ~/GitHubs/ReducedBacterialProteinsDatabase/snakefiles/uni
 or on a cluster:
 
 ```
-snakemake --configfile ~/GitHubs/ReducedBacterialProteinsDatabase/snakefiles/uniref_config.yaml --snakefile ~/GitHubs/ReducedBacterialProteinsDatabase/snakefiles/uniref.snakefile --cluster 'qsub -cwd -o sge_out -e sge_err -V -q important' --cores 12 --local-cores 6 --latency-wait 60
+snakemake --configfile ~/GitHubs/ReducedBacterialProteinsDatabase/snakefiles/uniref_config.yaml --snakefile ~/GitHubs/ReducedBacterialProteinsDatabase/snakefiles/uniref.snakefile --cluster 'qsub -cwd -o sge_out -e sge_err -V' --cores 12 --local-cores 6 --latency-wait 60
 ```
 
 (As usual on a cluster, increase `--latency-wait` to ensure NFS completes the file transfers). This will run on 12 nodes of your cluster.
