@@ -213,8 +213,8 @@ UNIDIR    = config['Paths']['Uniprot directory']
 OUTPUTDIR = config['Paths']['Output directory']
 LOGDIR    = config['Paths']['Log directory']
 RANK      = config['Taxonomic rank']
-NUMFILES  = config['Number of temporary files']
-NUMFILES += 1 # this is because we are using range
+
+NUMFILES = min(workflow.cores, workflow.nodes)
 
 rule all:
     input:
