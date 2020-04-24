@@ -269,8 +269,8 @@ rule count_uniref:
     input:
         u = os.path.join(UNIDIR, "uniref50.fasta.gz")
     output:
-        #temp(os.path.join(UNIDIR, "tmp", "uniref50.entries"))
-        os.path.join(UNIDIR, "tmp", "uniref50.entries")
+        temp(os.path.join(UNIDIR, "tmp", "uniref50.entries"))
+        # os.path.join(UNIDIR, "tmp", "uniref50.entries")
     shell:
         "gunzip -c {input.u} | grep -c \> > {output}"
 
@@ -283,8 +283,8 @@ rule split_uniref_to_files:
         u = os.path.join(UNIDIR, "uniref50.fasta.gz"),
         r = os.path.join(UNIDIR, "tmp", "uniref50.entries")
     output:
-        # temp(os.path.join(UNIDIR, "tmp", "uniref50.split.{filenumber}.fa"))
-        fn = os.path.join(UNIDIR, "tmp", "uniref50.split.{filenumber}.fa")
+        fn = temp(os.path.join(UNIDIR, "tmp", "uniref50.split.{filenumber}.fa"))
+        # fn = os.path.join(UNIDIR, "tmp", "uniref50.split.{filenumber}.fa")
     params:
         n = NUMFILES-1,
         d = os.path.join(UNIDIR, "tmp"),
@@ -310,8 +310,8 @@ rule assign_to_taxonomy:
         u = os.path.join(UNIDIR, "tmp", "uniref50.split.{filenumber}.fa"),
         r = os.path.join(OUTPUTDIR, "ranks.tsv")
     output:
-        #outdir = temp(directory(os.path.join(OUTPUTDIR, RANK, "{filenumber}")))
-        outdir = directory(os.path.join(OUTPUTDIR, RANK, "{filenumber}"))
+        outdir = temp(directory(os.path.join(OUTPUTDIR, RANK, "{filenumber}")))
+        # outdir = directory(os.path.join(OUTPUTDIR, RANK, "{filenumber}"))
     log:
         l = os.path.join(LOGDIR, "rewriting_uniref.{filenumber}.log")
     run:
