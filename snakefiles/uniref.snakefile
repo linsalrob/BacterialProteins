@@ -214,8 +214,9 @@ OUTPUTDIR = config['Paths']['Output directory']
 LOGDIR    = config['Paths']['Log directory']
 RANK      = config['Taxonomic rank']
 REMOVETMP = config['Remove Temporary Files']
+NUMFILES  = config['Number of Temporary Files'] + 1
 
-NUMFILES = min(workflow.cores, workflow.nodes) + 1
+# NUMFILES = min(workflow.cores, workflow.nodes) + 1
 
 rule all:
     input:
