@@ -213,14 +213,14 @@ UNIDIR    = config['Paths']['Uniprot directory']
 OUTPUTDIR = config['Paths']['Output directory']
 LOGDIR    = config['Paths']['Log directory']
 RANK      = config['Taxonomic rank']
+REMOVETMP = config['Remove Temporary Files']
 
-NUMFILES = min(workflow.cores, workflow.nodes)
+NUMFILES = min(workflow.cores, workflow.nodes) + 1
 
 rule all:
     input:
         expand(os.path.join(OUTPUTDIR, RANK, "{filenumber}"), filenumber=range(1, NUMFILES)),
         "Complete"
-
 
 rule write_ranks_file:
     input:
@@ -244,11 +244,9 @@ rule get_ncbi_taxonomy:
         temp(os.path.join(NCBIDIR, "readme.txt")),
         os.path.join(NCBIDIR, "names.dmp"),
         os.path.join(NCBIDIR, "nodes.dmp")
-    params:
-        ncbidir = NCBIDIR
     shell:
         """
-        cd {params.ncbidir} &&
+        cd {NCBIDIR} &&
         curl -LO ftp://ftp.ncbi.nlm.nih.gov/pub/taxonomy/taxdump.tar.gz &&
         curl -LO ftp://ftp.ncbi.nlm.nih.gov/pub/taxonomy/taxdump.tar.gz.md5 &&
         md5sum -c taxdump.tar.gz.md5 &&
@@ -269,10 +267,10 @@ rule count_uniref:
     input:
         u = os.path.join(UNIDIR, "uniref50.fasta.gz")
     output:
-        temp(os.path.join(UNIDIR, "tmp", "uniref50.entries"))
-        # os.path.join(UNIDIR, "tmp", "uniref50.entries")
+        # ue = os.path.join(UNIDIR, "tmp", "uniref50.entries")
+        ue = temp(os.path.join(UNIDIR, "tmp", "uniref50.entries")) if REMOVETMP else os.path.join(UNIDIR, "tmp", "uniref50.entries")
     shell:
-        "gunzip -c {input.u} | grep -c \> > {output}"
+        "gunzip -c {input.u} | grep -c \> > {output.ue}"
 
 rule split_uniref_to_files:
     """ 
@@ -283,8 +281,8 @@ rule split_uniref_to_files:
         u = os.path.join(UNIDIR, "uniref50.fasta.gz"),
         r = os.path.join(UNIDIR, "tmp", "uniref50.entries")
     output:
-        fn = temp(os.path.join(UNIDIR, "tmp", "uniref50.split.{filenumber}.fa"))
         # fn = os.path.join(UNIDIR, "tmp", "uniref50.split.{filenumber}.fa")
+        fn = temp(os.path.join(UNIDIR, "tmp", "uniref50.split.{filenumber}.fa")) if REMOVETMP else os.path.join(UNIDIR, "tmp", "uniref50.split.{filenumber}.fa")
     params:
         n = NUMFILES-1,
         d = os.path.join(UNIDIR, "tmp"),
@@ -310,8 +308,8 @@ rule assign_to_taxonomy:
         u = os.path.join(UNIDIR, "tmp", "uniref50.split.{filenumber}.fa"),
         r = os.path.join(OUTPUTDIR, "ranks.tsv")
     output:
-        outdir = temp(directory(os.path.join(OUTPUTDIR, RANK, "{filenumber}")))
         # outdir = directory(os.path.join(OUTPUTDIR, RANK, "{filenumber}"))
+        outdir = temp(directory(os.path.join(OUTPUTDIR, RANK, "{filenumber}"))) if REMOVETMP else directory(os.path.join(OUTPUTDIR, RANK, "{filenumber}"))
     log:
         l = os.path.join(LOGDIR, "rewriting_uniref.{filenumber}.log")
     run:
@@ -321,7 +319,8 @@ rule concat_taxonomy:
     input:
         expand(os.path.join(OUTPUTDIR, RANK, "{count}"), count=range(1, NUMFILES))
     output:
-        touch("Complete")
+        #o = touch("concat_taxonomy_complete")
+        o = temp(touch("concat_taxonomy_complete")) if REMOVETMP else touch("concat_taxonomy_complete")
     params:
         odir = os.path.join(OUTPUTDIR, RANK)
     log:
@@ -334,4 +333,16 @@ rule concat_taxonomy:
         done
         """
 
+rule dont_remove_tempfiles_too_soon:
+    """
+    This is somewhat of a pseudo-rule to prevent removing the 
+    temporary results files too soon. 
+    We need to wait until concat_taxonomy is complete
+    for _all_ data before we remove _any_ of the directories
+    """
+    input:
+        "concat_taxonomy_complete",
+        expand(os.path.join(OUTPUTDIR, RANK, "{count}"), count=range(1, NUMFILES))
+    output:
+        touch("Complete")
 
