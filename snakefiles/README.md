@@ -14,11 +14,18 @@ There are several essential steps:
 8. Remove all temporary files.
 
 *Important Notes*:
-- The splitting speeds things up, but you can only parallelize things so far since we have to read the disk to get the data. I recommend somewhere between 8-16 cores.
+- The splitting speeds things up, but you can only parallelize things so far since we have to read the disk to get the data. I recommend somewhere around 8-16 cores, but see the bug note below!
 - The splitting is controlled by the number of `cores` as defined by the `--cores` flag.
    - If you are running on a multicore machine, that defines the number of cores you want to use.
    - If you are running on a cluster, that defines the number of nodes you want to use.
    - In either case, I do not recommend setting it much about 16. You will not realize much of a speed up!
+
+# Known issues
+
+There is an issue running this on a (my?) cluster that I have not been able to track down, so be aware of it:
+
+If you specify < 16 cores on the cluster, the workflow currently crashes at the `concat_taxonomy` rule. I _think_ that the issue relates to using the number of cores to specify the number of temporary files, and that the cluster implementation of `snakemake` has some issues with cores vs. nodes as described in this [GitHub issue](https://github.com/snakemake/snakemake/issues/213) (I think something is using either `os.cpu_count()` or `sys.maxsize` to figure out how many cores are available. It happens, of course, that the nodes of the cluster I am using to test this have 16 cores, and so it is trying to find results from `n` to 16 where `n` is the number of cores you specify, and this only occurs when `n` < number of processors available. I expect that the solution to that issue will resolve this bug. 
+
 
 # Installation
 
@@ -45,7 +52,7 @@ snakemake --configfile ~/GitHubs/ReducedBacterialProteinsDatabase/snakefiles/uni
 or on a cluster:
 
 ```
-snakemake --configfile ~/GitHubs/ReducedBacterialProteinsDatabase/snakefiles/uniref_config.yaml --snakefile ~/GitHubs/ReducedBacterialProteinsDatabase/snakefiles/uniref.snakefile --cluster 'qsub -cwd -o sge_out -e sge_err -V' --cores 12 --local-cores 6 --latency-wait 60
+snakemake --configfile ~/GitHubs/ReducedBacterialProteinsDatabase/snakefiles/uniref_config.yaml --snakefile ~/GitHubs/ReducedBacterialProteinsDatabase/snakefiles/uniref.snakefile --cluster 'qsub -cwd -o sge_out -e sge_err -V' --cores 20 --local-cores 6 --latency-wait 60
 ```
 
-(As usual on a cluster, increase `--latency-wait` to ensure NFS completes the file transfers). This will run on 12 nodes of your cluster.
+(As usual on a cluster, increase `--latency-wait` to ensure NFS completes the file transfers). This will run on 20 nodes of your cluster.
