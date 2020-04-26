@@ -22,10 +22,12 @@ There are several essential steps:
 
 # Known issues
 
-There is an issue running this on a (my?) cluster that I have not been able to track down, so be aware of it:
+There is an issue running this on a (my?) cluster that I have not been able to track down, and so a feature has been removed:
 
 If you specify < 16 cores on the cluster, the workflow currently crashes at the `concat_taxonomy` rule. I _think_ that the issue relates to using the number of cores to specify the number of temporary files, and that the cluster implementation of `snakemake` has some issues with cores vs. nodes as described in this [GitHub issue](https://github.com/snakemake/snakemake/issues/213) (I think something is using either `os.cpu_count()` or `sys.maxsize` to figure out how many cores are available. It happens, of course, that the nodes of the cluster I am using to test this have 16 cores, and so it is trying to find results from `n` to 16 where `n` is the number of cores you specify, and this only occurs when `n` < number of processors available. I expect that the solution to that issue will resolve this bug. 
 
+
+Instead, you need to specify the number of temporary files in the config file. This works, but is not as clean.
 
 # Installation
 
