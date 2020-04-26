@@ -6,4 +6,5 @@ Paths:
     'Log directory': 'log'
 
 'Taxonomic rank': 'superkingdom'
+'Number of Temporary Files' : 20
 'Remove Temporary Files' : False
