@@ -7,4 +7,4 @@ Paths:
 
 'Taxonomic rank': 'superkingdom'
 'Number of Temporary Files' : 20
-'Remove Temporary Files' : False
+'Remove Temporary Files' : True
